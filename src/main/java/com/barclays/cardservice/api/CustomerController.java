@@ -91,6 +91,6 @@ public class CustomerController {
 	@DeleteMapping(CustomerControllerConstants.DELETE_CARDS)
 	public ResponseEntity<String> deleteCustomerCards(@PathVariable Integer customerId, @RequestBody List<Integer> cardIds) throws BarclaysException {
 		cardCustomerService.deleteCardOfExistingCustomer(customerId, cardIds);
-		return new ResponseEntity<>(SystemConstants.CUSTOMER_DELETE_SUCCESS_RESPONSE, HttpStatus.OK);
+		return new ResponseEntity<>(SystemConstants.CARD_DELETE_SUCCESS_RESPONSE, HttpStatus.OK);
 	}
 }

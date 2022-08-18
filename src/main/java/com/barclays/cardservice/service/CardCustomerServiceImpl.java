@@ -114,6 +114,10 @@ public class CardCustomerServiceImpl implements CardCustomerService {
 	 */
 	@Override
 	public void deleteCardOfExistingCustomer(Integer customerId, List<Integer> cardIdsToDelete) throws BarclaysException {
+		if (cardIdsToDelete == null || cardIdsToDelete.size() == 0) {
+			throw new BarclaysException(SystemConstants.CARD_LIST_NOT_PROVIDED_RESPONSE);
+		}
+		
 		Optional<Customer> opt = customerRepository.findById(customerId);
 		if (!opt.isPresent())
 			throw new BarclaysException(SystemConstants.CUSTOMER_NOT_FOUND_RESPONSE);
