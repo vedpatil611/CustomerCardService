@@ -13,4 +13,5 @@ import com.barclays.cardservice.entity.Card;
  */
 public interface CardRepository extends CrudRepository<Card, Integer> {
 	List<Card> findByCustomer_customerId(Integer customerId);
+	void deleteByCustomer_customerId(Integer customerId);
 }

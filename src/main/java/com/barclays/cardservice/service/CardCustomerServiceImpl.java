@@ -101,8 +101,9 @@ public class CardCustomerServiceImpl implements CardCustomerService {
 			throw new BarclaysException(SystemConstants.CUSTOMER_NOT_FOUND_RESPONSE);
 		
 		Customer customer = opt.get();
-		List<Card> cards = cardRepository.findByCustomer_customerId(customerId);
-		cards.forEach(card -> cardRepository.delete(card));
+		cardRepository.deleteByCustomer_customerId(customerId);
+//		List<Card> cards = cardRepository.findByCustomer_customerId(customerId);
+//		cards.forEach(card -> cardRepository.delete(card));
 		customerRepository.delete(customer);
 	}
 
