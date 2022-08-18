@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.barclays.cardservice.constants.CustomerControllerConstants;
 import com.barclays.cardservice.constants.SystemConstants;
 import com.barclays.cardservice.dto.CardDTO;
 import com.barclays.cardservice.dto.CustomerDTO;
@@ -25,7 +26,7 @@ import com.barclays.cardservice.service.CardCustomerService;
  * 
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping(CustomerControllerConstants.ROOT_MAPPING)
 public class CustomerController {
 	
 	@Autowired
@@ -37,7 +38,7 @@ public class CustomerController {
 	 * @return Customer Details json
 	 * @throws BarclaysException
 	 */
-	@GetMapping("/customer/{customerId}")
+	@GetMapping(CustomerControllerConstants.GET_CUSTOMER)
 	public ResponseEntity<CustomerDTO> getCustomer(@PathVariable Integer customerId) throws BarclaysException {
 		CustomerDTO customer = cardCustomerService.getCustomerDetails(customerId);
 		return new ResponseEntity<>(customer, HttpStatus.OK);
@@ -49,7 +50,7 @@ public class CustomerController {
 	 * @return ID of newly created customer
 	 * @throws BarclaysException
 	 */
-	@PostMapping("/customer/new")
+	@PostMapping(CustomerControllerConstants.ADD_CUSTOMER)
 	public ResponseEntity<Integer> addCustomer(@RequestBody CustomerDTO customer) throws BarclaysException {
 		Integer id = cardCustomerService.addCustomer(customer);
 		return new ResponseEntity<>(id, HttpStatus.OK);
@@ -62,7 +63,7 @@ public class CustomerController {
 	 * @return Http response
 	 * @throws BarclaysException
 	 */
-	@PostMapping("/customer/{customerId}/newcard")
+	@PostMapping(CustomerControllerConstants.NEW_CARD)
 	public ResponseEntity<String> issueCard(@PathVariable Integer customerId, @RequestBody CardDTO card) throws BarclaysException {
 		cardCustomerService.issueCardToExistingCustomer(customerId, card);
 		return new ResponseEntity<>(SystemConstants.CARD_ISSUSED_SUCCESS_RESPONSE, HttpStatus.OK);
@@ -74,10 +75,10 @@ public class CustomerController {
 	 * @return Http Response
 	 * @throws BarclaysException
 	 */
-	@DeleteMapping("/customer/{customerId}")
+	@DeleteMapping(CustomerControllerConstants.DELETE_CUSTOMER)
 	public ResponseEntity<String> deleteCustomer(@PathVariable Integer customerId) throws BarclaysException {
 		cardCustomerService.deleteCustomer(customerId);
-		return new ResponseEntity<>("Customer deleted successfully", HttpStatus.OK);
+		return new ResponseEntity<>(SystemConstants.CUSTOMER_DELETE_SUCCESS_RESPONSE, HttpStatus.OK);
 	}
 	
 	/**
@@ -87,9 +88,9 @@ public class CustomerController {
 	 * @return Http response
 	 * @throws BarclaysException
 	 */
-	@DeleteMapping("/customer/{customerId}/cards")
+	@DeleteMapping(CustomerControllerConstants.DELETE_CARDS)
 	public ResponseEntity<String> deleteCustomerCards(@PathVariable Integer customerId, @RequestBody List<Integer> cardIds) throws BarclaysException {
 		cardCustomerService.deleteCardOfExistingCustomer(customerId, cardIds);
-		return new ResponseEntity<>("Customer deleted successfully", HttpStatus.OK);
+		return new ResponseEntity<>(SystemConstants.CUSTOMER_DELETE_SUCCESS_RESPONSE, HttpStatus.OK);
 	}
 }

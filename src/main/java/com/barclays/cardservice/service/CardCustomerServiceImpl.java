@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.barclays.cardservice.constants.SystemConstants;
 import com.barclays.cardservice.dto.CardDTO;
 import com.barclays.cardservice.dto.CustomerDTO;
 import com.barclays.cardservice.entity.Card;
@@ -41,7 +42,7 @@ public class CardCustomerServiceImpl implements CardCustomerService {
 	public CustomerDTO getCustomerDetails(Integer customerId) throws BarclaysException {
 		Optional<Customer> opt = customerRepository.findById(customerId);
 		if (!opt.isPresent())
-			throw new BarclaysException("Customer not found");
+			throw new BarclaysException(SystemConstants.CUSTOMER_NOT_FOUND_RESPONSE);
 		
 		Customer customer = opt.get();
 		
@@ -67,7 +68,6 @@ public class CardCustomerServiceImpl implements CardCustomerService {
 		
 		List<CardDTO> cardDTOs = customerDTO.getCards();
 		if (cardDTOs != null && cardDTOs.size() > 0) {
-			System.out.println("Here");
 			cardDTOs.forEach(cardDTO -> cardRepository.save(cardDTOtoModel(newCustomer, cardDTO)));
 		}
 		
@@ -84,7 +84,7 @@ public class CardCustomerServiceImpl implements CardCustomerService {
 	public void issueCardToExistingCustomer(Integer customerId, CardDTO cardDTO) throws BarclaysException {
 		Optional<Customer> opt = customerRepository.findById(customerId);
 		if (!opt.isPresent())
-			throw new BarclaysException("Customer not found");
+			throw new BarclaysException(SystemConstants.CUSTOMER_NOT_FOUND_RESPONSE);
 		
 		cardRepository.save(cardDTOtoModel(opt.get(), cardDTO));
 	}
@@ -98,7 +98,7 @@ public class CardCustomerServiceImpl implements CardCustomerService {
 	public void deleteCustomer(Integer customerId) throws BarclaysException {
 		Optional<Customer> opt = customerRepository.findById(customerId);
 		if (!opt.isPresent())
-			throw new BarclaysException("Customer not found");
+			throw new BarclaysException(SystemConstants.CUSTOMER_NOT_FOUND_RESPONSE);
 		
 		Customer customer = opt.get();
 		List<Card> cards = cardRepository.findByCustomer_customerId(customerId);
@@ -116,7 +116,7 @@ public class CardCustomerServiceImpl implements CardCustomerService {
 	public void deleteCardOfExistingCustomer(Integer customerId, List<Integer> cardIdsToDelete) throws BarclaysException {
 		Optional<Customer> opt = customerRepository.findById(customerId);
 		if (!opt.isPresent())
-			throw new BarclaysException("Customer not found");
+			throw new BarclaysException(SystemConstants.CUSTOMER_NOT_FOUND_RESPONSE);
 		
 		Customer customer = opt.get();
 		
@@ -124,11 +124,11 @@ public class CardCustomerServiceImpl implements CardCustomerService {
 			Optional<Card> cardOpt = cardRepository.findById(cardId);
 			
 			if (!cardOpt.isPresent())
-				throw new BarclaysException("Card not found");
+				throw new BarclaysException(SystemConstants.CARD_NOT_FOUND_RESPONSE);
 			
 			Card card = cardOpt.get();
 			if (card.getCustomer().getCustomerId() != customer.getCustomerId()) 
-				throw new BarclaysException("Card does not belong to customer");
+				throw new BarclaysException(SystemConstants.CARD_DOES_NOT_BELONG_TO_CUSTOMER_RESPONSE);
 			
 			cardRepository.delete(card);
 		}
