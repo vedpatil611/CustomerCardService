@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,7 @@ public class CustomerControllerTest {
 	}
 
 	/**
-	 * get Customer fail
+	 * get Customer fail - Customer id does not exist
 	 * @throws BarclaysException
 	 */
 	@Test
@@ -101,7 +102,7 @@ public class CustomerControllerTest {
 	}
 
 	/**
-	 * issue card fail
+	 * issue card fail - Customer id does not exist
 	 * @throws BarclaysException
 	 */
 	@Test
@@ -120,7 +121,7 @@ public class CustomerControllerTest {
 	}
 	
 	/**
-	 * delete card fail 1
+	 * delete card fail 1 - Customer id does not exist
 	 * @throws BarclaysException
 	 */
 	@Test
@@ -132,7 +133,7 @@ public class CustomerControllerTest {
 	}
 	
 	/**
-	 * delete card fail 2
+	 * delete card fail 2 - Card id list not provided
 	 * @throws BarclaysException
 	 */
 	@Test
@@ -141,7 +142,7 @@ public class CustomerControllerTest {
 	}
 
 	/**
-	 * delete card fail 3
+	 * delete card fail 3 - Card ids does not exists
 	 * @throws BarclaysException
 	 */
 	@Test
@@ -153,7 +154,7 @@ public class CustomerControllerTest {
 	}
 	
 	/**
-	 * delete card fail 4
+	 * delete card fail 4 - Card does not belong to customer
 	 * @throws BarclaysException
 	 */
 	@Test
@@ -196,7 +197,7 @@ public class CustomerControllerTest {
 	}
 
 	/**
-	 * delete customer fail
+	 * Delete Customer fail as the customer does not exist
 	 * @throws BarclaysException
 	 */
 	@Test
@@ -204,4 +205,11 @@ public class CustomerControllerTest {
 		Assertions.assertThrows(BarclaysException.class, () -> customerController.deleteCustomer(customer1.getId()));
 	}
 	
+	@AfterAll
+	public static void Free() {
+		customer1 = null;
+		customer2 = null;
+		card1 = null;
+		card2 = null;
+	}
 }
